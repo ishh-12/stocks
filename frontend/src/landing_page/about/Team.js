@@ -1,6 +1,8 @@
 import React from "react";
 
 function Team() {
+  const teamImage = `${process.env.PUBLIC_URL}/media/images/nithinKamath.jpg`;
+
   return (
     <div className="container">
       <div className="row p-3 mt-5 border-top">
@@ -13,8 +15,9 @@ function Team() {
       >
         <div className="col-6 p-3 text-center">
           <img
-            src="media/images/nithinKamath.jpg"
+            src={teamImage}
             style={{ borderRadius: "100%", width: "50%" }}
+            alt="Nithin Kamath"
           />
           <h4 className="mt-5">Nithin Kamath</h4>
           <h6>Founder, CEO</h6>

@@ -1,0 +1,9 @@
+{
+  "name": "zerodha-clonee",
+  "private": true,
+  "scripts": {
+    "start:backend": "npm start --prefix backend",
+    "start:dashboard": "npm start --prefix dashboard",
+    "dev": "start \"backend\" cmd /k \"cd backend && npm start\" && start \"dashboard\" cmd /k \"cd dashboard && npm start\""
+  }
+}

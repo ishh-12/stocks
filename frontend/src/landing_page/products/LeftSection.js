@@ -9,11 +9,14 @@ function LeftSection({
   googlePlay,
   appStore,
 }) {
+  const googlePlayBadge = `${process.env.PUBLIC_URL}/media/images/googlePlayBadge.svg`;
+  const appStoreBadge = `${process.env.PUBLIC_URL}/media/images/appstoreBadge.svg`;
+
   return (
     <div className="container mt-5">
       <div className="row">
         <div className="col-6">
-          <img src={imageURL} />
+          <img src={imageURL} alt={productName} />
         </div>
         <div className="col-6 p-5 mt-5">
           <h1>{productName}</h1>
@@ -26,12 +29,13 @@ function LeftSection({
           </div>
           <div className="mt-3">
             <a href={googlePlay}>
-              <img src="media/images/googlePlayBadge.svg" />
+              <img src={googlePlayBadge} alt="Get it on Google Play" />
             </a>
             <a href={appStore}>
               <img
-                src="media/images/appstoreBadge.svg"
+                src={appStoreBadge}
                 style={{ marginLeft: "50px" }}
+                alt="Download on the App Store"
               />
             </a>
           </div>

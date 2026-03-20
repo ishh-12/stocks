@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Footer() {
   return (
@@ -6,18 +7,18 @@ function Footer() {
       <div className="container border-top mt-5">
         <div className="row mt-5">
           <div className="col">
-            <img src="media/images/logo.svg" style={{ width: "50%" }} />
+            <img src={`${process.env.PUBLIC_URL}/media/images/logo.svg`} style={{ width: "50%" }} />
             <p>
               &copy; 2010 - 2024, Not Zerodha Broking Ltd. All rights reserved.
             </p>
           </div>
           <div className="col">
             <p>Company</p>
-            <a href="">About</a>
+            <Link to="/about">About</Link>
             <br />
-            <a href="">Products</a>
+            <Link to="/product">Products</Link>
             <br />
-            <a href="">Pricing</a>
+            <Link to="/pricing">Pricing</Link>
             <br />
             <a href="">Referral programme</a>
             <br />
@@ -32,9 +33,9 @@ function Footer() {
           </div>
           <div className="col">
             <p>Support</p>
-            <a href="">Contact</a>
+            <Link to="/support">Contact</Link>
             <br />
-            <a href="">Support portal</a>
+            <Link to="/support">Support portal</Link>
             <br />
             <a href="">Z-Connect blog</a>
             <br />
@@ -45,7 +46,7 @@ function Footer() {
           </div>
           <div className="col">
             <p>Account</p>
-            <a href="">Open an account</a>
+            <Link to="/signup">Open an account</Link>
             <br />
             <a href="">Fund transfer</a>
             <br />

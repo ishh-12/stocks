@@ -1,11 +1,14 @@
 import React from "react";
 
 function Awards() {
+  const largestBrokerImage = `${process.env.PUBLIC_URL}/media/images/largestBroker.svg`;
+  const pressLogosImage = `${process.env.PUBLIC_URL}/media/images/pressLogos.png`;
+
   return (
     <div className="container mt-5">
       <div className="row">
         <div className="col-6 p-5">
-          <img src="media/images/largestBroker.svg" />
+          <img src={largestBrokerImage} alt="Largest stock broker in India" />
         </div>
         <div className="col-6 p-5 mt-5">
           <h1>Largest stock broker in India</h1>
@@ -41,7 +44,7 @@ function Awards() {
               </ul>
             </div>
           </div>
-          <img src="media/images/pressLogos.png" style={{ width: "90%" }} />
+          <img src={pressLogosImage} style={{ width: "90%" }} alt="Press logos" />
         </div>
       </div>
     </div>

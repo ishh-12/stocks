@@ -1,11 +1,13 @@
 import React from "react";
 
 function Education() {
+  const educationImage = `${process.env.PUBLIC_URL}/media/images/education.svg`;
+
   return (
     <div className="container mt-5">
       <div className="row">
         <div className="col-6">
-          <img src="media/images/education.svg" style={{ width: "70%" }} />
+          <img src={educationImage} style={{ width: "70%" }} alt="Education" />
         </div>
         <div className="col-6">
           <h1 className="mb-3 fs-2">Free and open market education</h1>

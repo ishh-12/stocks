@@ -1,6 +1,8 @@
 import React from "react";
 
 function Stats() {
+  const ecosystemImage = `${process.env.PUBLIC_URL}/media/images/ecosystem.png`;
+
   return (
     <div className="container p-3">
       <div className="row p-5">
@@ -29,7 +31,7 @@ function Stats() {
           </p>
         </div>
         <div className="col-6 p-5">
-          <img src="media/images/ecosystem.png" style={{ width: "90%" }} />
+          <img src={ecosystemImage} style={{ width: "90%" }} alt="Zerodha ecosystem" />
           <div className="text-center">
             <a href="" className="mx-5" style={{ textDecoration: "none" }}>
               Explore our products{" "}

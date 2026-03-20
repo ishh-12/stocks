@@ -1,0 +1,14 @@
+node_modules/
+**/node_modules/
+
+build/
+**/build/
+
+*.log
+backend/*.log
+
+.env
+**/.env
+
+nul
+cookies.txt
