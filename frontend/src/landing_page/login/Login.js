@@ -8,6 +8,8 @@ function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+
+//Making API Call
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -23,6 +25,7 @@ function Login() {
       });
 
       const data = await response.json().catch(() => null);
+        // Handle response...
 
       if (!response.ok) {
         setError(data?.message || "Login failed");
@@ -113,3 +116,12 @@ function Login() {
 }
 
 export default Login;
+// The Complete Flow:
+
+// User fills form and clicks submit
+// fetch() makes HTTP request to backend
+// Backend route (/api/auth/login) receives request
+// Route calls controller function
+// Controller validates data, checks database
+// Controller sends JSON response
+// Frontend receives response and updates UI
