@@ -842,5 +842,150 @@ hr {
   background-color: rgb(212, 212, 212);
 }
 
+@media (max-width: 900px) {
+  .topbar-container,
+  .dashboard-container {
+    height: auto;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .indices-container,
+  .menu-container,
+  .watchlist-container,
+  .content {
+    width: 100%;
+    flex-basis: auto;
+  }
+
+  .indices-container {
+    border-right: none;
+    border-bottom: 1px solid rgb(224, 224, 224);
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .menu-container {
+    padding: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .menus {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .menus ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 18px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .menus li {
+    margin-right: 0;
+  }
+
+  .profile {
+    margin-left: 0;
+  }
+
+  .watchlist-container {
+    max-height: none;
+    box-shadow: none;
+    border-bottom: 1px solid rgb(236, 235, 235);
+  }
+
+  .search-container {
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  .search {
+    box-sizing: border-box;
+  }
+
+  .counts {
+    position: static;
+    width: 100%;
+    padding: 0 16px 12px;
+    text-align: right;
+  }
+
+  .content {
+    padding: 20px 16px 40px;
+  }
+
+  .funds {
+    text-align: left;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .col {
+    width: 100%;
+    flex-basis: auto;
+  }
+
+  .data {
+    width: 100%;
+  }
+
+  .order-table {
+    overflow-x: auto;
+  }
+
+  .order-table table {
+    min-width: 680px;
+  }
+
+  .watchlist-number {
+    width: 100%;
+    left: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .indices-container {
+    padding: 12px 16px;
+  }
+
+  .nifty,
+  .sensex {
+    flex-basis: 100%;
+    justify-content: flex-start;
+  }
+
+  .menu-container {
+    padding: 12px 16px;
+  }
+
+  .menu {
+    font-size: 0.9rem;
+  }
+
+  .actions span button {
+    width: 36px;
+    margin-right: 6px;
+  }
+
+  .data .first h3 {
+    font-size: 2rem;
+  }
+}
+
 
 
