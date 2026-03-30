@@ -59,3 +59,86 @@ a:hover {
   border-radius: 10px;
   border: none;
 }
+
+.product-section img,
+.pricing-card img {
+  max-width: 100%;
+  height: auto;
+}
+
+.product-image-wrap img {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.product-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.product-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 32px;
+  align-items: center;
+}
+
+.store-badges img {
+  height: 40px;
+  width: auto;
+}
+
+.universe-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.universe-logo {
+  width: 150px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.universe-logo-fundhouse {
+  width: 220px;
+}
+
+@media (max-width: 767.98px) {
+  .nav-link {
+    margin-left: 0;
+  }
+
+  #supportWrapper {
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+  }
+
+  .product-copy {
+    padding: 24px 12px 0 !important;
+    margin-top: 0 !important;
+    text-align: center;
+  }
+
+  .product-links,
+  .store-badges {
+    justify-content: center;
+  }
+
+  .pricing-card {
+    padding-top: 0 !important;
+  }
+
+  .universe-logo-fundhouse {
+    width: 160px;
+  }
+
+  .universe-cta {
+    width: min(280px, 100%) !important;
+  }
+}
