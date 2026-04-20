@@ -35,11 +35,10 @@ const allowedOrigins = new Set([
   "http://127.0.0.1:3001",
   "http://127.0.0.1:3002",
   "https://ishh-12-stocks-maho.vercel.app",
+  "https://ishh-12-stocks-dash.vercel.app",
   "https://stocky-beta.vercel.app",
   "https://ishh-12-stocks-zbhu.vercel.app",
-  "https://stocks-dash-er2q87iya-aish1.vercel.app",
   "https://stocky-bk5mn20dx-aish1.vercel.app",
-  "https://stocky-dash-er2q87iya-aish1.vercel.app",
 ]);
 
 const allowedOriginPatterns = [

@@ -1,6 +1,6 @@
 const LOCAL_DASHBOARD_URL = "http://localhost:3001";
 const LOCAL_API_URL = "http://localhost:3002";
-const PRODUCTION_DASHBOARD_URL = "https://stocky-beta.vercel.app";
+const PRODUCTION_DASHBOARD_URL = "https://ishh-12-stocks-dash.vercel.app";
 const PRODUCTION_API_URL = "https://stocky-backend-n4pe.onrender.com";
 
 const isLocalhost = (hostname) =>
