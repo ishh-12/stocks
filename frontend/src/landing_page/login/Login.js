@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { buildApiUrl } from "../../config/api";
-import { getDashboardBaseUrl } from "../../config/runtimeUrls";
+import { getApiBaseUrl, getDashboardBaseUrl } from "../../config/runtimeUrls";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -46,7 +46,7 @@ function Login() {
       setError(data?.message || "Login failed");
     } catch (err) {
       setError(
-        "Cannot reach the backend server. Make sure the backend is running on port 3002."
+        `Cannot reach the backend server at ${getApiBaseUrl()}. Please try again in a few seconds.`
       );
     } finally {
       setLoading(false);
