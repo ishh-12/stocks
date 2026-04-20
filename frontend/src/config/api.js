@@ -1,8 +1,6 @@
-const API_BASE_URL =
-  process.env.REACT_APP_API_URL ||
-  (typeof window !== "undefined"
-    ? `${window.location.protocol}//${window.location.hostname}:3002`
-    : "http://localhost:3002");
+import { getApiBaseUrl } from "./runtimeUrls";
+
+const API_BASE_URL = getApiBaseUrl();
 
 export const buildApiUrl = (path) => `${API_BASE_URL}${path}`;
 // Why this setup?

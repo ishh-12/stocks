@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { buildApiUrl } from "../../config/api";
+import { getDashboardBaseUrl } from "../../config/runtimeUrls";
 
 function Signup() {
   const [formData, setFormData] = useState({
@@ -61,7 +62,9 @@ function Signup() {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
         localStorage.setItem("isAuthenticated", "true");
-        window.location.href = `http://localhost:3001?token=${data.token}`;
+        window.location.href = `${getDashboardBaseUrl()}?token=${encodeURIComponent(
+          data.token
+        )}`;
         return;
       }
 

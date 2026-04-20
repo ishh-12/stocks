@@ -27,6 +27,17 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 const app = express(); // Create an Express application instance Creates server object
 
+const allowedOrigins = new Set([
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://localhost:3002",
+  "http://127.0.0.1:3000",
+  "http://127.0.0.1:3001",
+  "http://127.0.0.1:3002",
+  "https://stocky-bk5mn20dx-aish1.vercel.app",
+  "https://stocky-dash-er2q87iya-aish1.vercel.app",
+]);
+
 /*Why const app = express()?
 
 express() creates a new Express application object
@@ -218,8 +229,7 @@ const isAllowedOrigin = (origin) => {
 
   try {
     const parsedOrigin = new URL(origin);
-    const allowedHostnames = new Set(["localhost", "127.0.0.1", "::1"]);
-    return parsedOrigin.protocol === "http:" && allowedHostnames.has(parsedOrigin.hostname);
+    return allowedOrigins.has(parsedOrigin.origin);
   } catch {
     return false;
   }

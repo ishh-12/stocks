@@ -14,22 +14,7 @@ import SupportPage from "./landing_page/support/SupportPage";
 import NotFound from "./landing_page/NotFound";
 import Navbar from "./landing_page/Navbar";
 import Footer from "./landing_page/Footer";
-
-const getDashboardBaseUrl = () => {
-  if (process.env.REACT_APP_DASHBOARD_URL) {
-    return process.env.REACT_APP_DASHBOARD_URL.replace(/\/+$/, "");
-  }
-
-  if (typeof window === "undefined") {
-    return "http://localhost:3001";
-  }
-
-  const protocol = window.location.protocol;
-  const host = window.location.hostname;
-  const dashboardPort = process.env.REACT_APP_DASHBOARD_PORT || "3001";
-
-  return `${protocol}//${host}:${dashboardPort}`;
-};
+import { getDashboardBaseUrl } from "./config/runtimeUrls";
 
 // Redirect component to external dashboard with token 
 const RedirectToDashboard = () => {

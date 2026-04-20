@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { getDashboardBaseUrl } from "../config/runtimeUrls";
 
 function Navbar() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -84,7 +85,7 @@ function Navbar() {
                   <li className="nav-item">
                     <a
                       className="nav-link active"
-                      href="http://localhost:3001"
+                      href={getDashboardBaseUrl()}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
