@@ -1,3 +1,4 @@
+//Controllers contain the actual business logic for handling requests.
 const UserModel = require("../model/UserModel");
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
@@ -23,7 +24,11 @@ exports.signup = async (req, res) => {
       return;
     }
 
-    const { email, password, phone, username } = req.body;
+
+ // Get data from request
+    const { email, password, phone, username } = req.body; 
+
+// Business logic (create user, hash password, etc.)
 
     // Check if user exists
     const existingUser = await UserModel.findOne({ email });
@@ -55,7 +60,7 @@ exports.signup = async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    return res.status(201).json({
+    return res.status(201).json({ // Send response
       success: true,
       message: "User registered successfully",
       token,
@@ -72,6 +77,11 @@ exports.signup = async (req, res) => {
     });
   }
 };
+// Request-Response Flow:
+
+// req (request) contains data from the client
+// res (response) is what you send back
+// Controllers process the request and return appropriate responses
 
 // ================= LOGIN =================
 exports.login = async (req, res) => {

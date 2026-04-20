@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router(); // Create a router instance
 const authController = require("../controllers/authController");
 const { passport } = require("../middleware/authMiddleware");
 
@@ -35,3 +35,9 @@ router.post("/logout", isAuthenticated, authController.logout);
 router.get("/me", isAuthenticated, authController.getMe);
 
 module.exports = router;
+//How Routes Work:
+
+// router is like a mini Express app for specific paths
+// HTTP methods: GET, POST, PUT, DELETE
+// The path is relative to where the router is mounted (/api/auth)
+// Middleware like isAuthenticated runs before the controller

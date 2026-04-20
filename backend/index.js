@@ -1,8 +1,13 @@
+// require("dotenv").config()
+// Loads .env variables (PORT, DB URL, JWT secret)
 require("dotenv").config();
 
-const express = require("express");
+/*What is Express?
+Express is a web framework for Node.js that makes it easy to build web servers and APIs. Think of it as a toolkit for handling HTTP requests and responses. */
+
+const express = require("express");// Import Express
 const mongoose = require("mongoose");
-const cors = require("cors");
+const cors = require("cors"); 
 const session = require("express-session");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
@@ -12,13 +17,22 @@ const { PositionsModel } = require("./model/PositionsModel");
 const { OrdersModel } = require("./model/OrdersModel");
 const UserModel = require("./model/UserModel");
 const authRoutes = require("./routes/authRoutes");
+const portfolioRoutes = require("./routes/portfolioRoutes");
+const analysisService = require("./services/portfolio/analysisService");
 
 const PORT = process.env.PORT || 3002;
 const uri = process.env.MONGO_URL;
 const dbName = process.env.MONGO_DB_NAME || "zerodha";
 const JWT_SECRET = process.env.JWT_SECRET;
 
-const app = express();
+const app = express(); // Create an Express application instance Creates server object
+
+/*Why const app = express()?
+
+express() creates a new Express application object
+This app object is your web server - it handles all incoming requests
+You configure routes, middleware, and settings on this app object */
+
 let isDatabaseReady = false;
 let isConnectingToDatabase = false;
 let reconnectTimer = null;
@@ -195,7 +209,7 @@ const authenticateToken = (req, res, next) => {
   }
 };
 
-app.use(express.json());
+
 
 const isAllowedOrigin = (origin) => {
   if (!origin) {
@@ -210,6 +224,15 @@ const isAllowedOrigin = (origin) => {
     return false;
   }
 };
+/*Middleware Setup (app.use)
+Middleware are functions that run between receiving a request and sending a response. They can modify requests, add data, or handle errors.
+Why app.use?
+
+app.use() tells Express to use middleware for ALL routes
+The order matters - middleware runs in the order you define it
+Routes (like authRoutes) are also middleware that handle specific paths */
+
+app.use(express.json());// Parse JSON data from requests
 
 app.use(
   cors({
@@ -222,8 +245,12 @@ app.use(
     },
     credentials: true,
   })
-);
+); // Handle Cross-Origin Resource Sharing
 
+
+// Define routes
+// app.get("/", ...)
+// app.use("/api/auth", authRoutes)
 app.get("/", (req, res) => {
   res.json({
     success: true,
@@ -242,9 +269,9 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24,
     },
   })
-);
+);// Manage user sessions
 
-app.use(passport.initialize());
+app.use(passport.initialize());// Initialize authentication
 app.use(passport.session());
 
 passport.use(
@@ -257,7 +284,8 @@ passport.use(
 passport.serializeUser(UserModel.serializeUser());
 passport.deserializeUser(UserModel.deserializeUser());
 
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authRoutes);// Mount routes at /api/auth path
+app.use("/api/portfolio", authenticateToken, ensureDatabaseReady, portfolioRoutes);
 
 app.get("/api/health", (req, res) => {
   res.status(isDatabaseReady ? 200 : 503).json({
@@ -291,6 +319,8 @@ app.get("/addHoldings", authenticateToken, ensureDatabaseReady, async (req, res)
       isLoss: item.isLoss || false,
     }))
   );
+
+  analysisService.invalidateUser(userId);
 
   res.json({
     success: true,
@@ -431,6 +461,8 @@ app.post("/newOrder", authenticateToken, ensureDatabaseReady, async (req, res) =
       }
     }
 
+    analysisService.invalidateUser(userId);
+
     return res.status(200).json({
       success: true,
       message: "Order saved.",
@@ -481,7 +513,13 @@ mongoose.connection.on("error", (err) => {
 
 let server;
 let serverStartRetryTimer = null;
+//Starting the Server (app.listen)
+/*Why app.listen?
 
+This actually starts the server and makes it listen for connections
+PORT is usually 3000, 3001, 3002, etc.
+The callback function runs when the server successfully starts
+Without this, your server doesn't run! */
 const startServer = () => {
   if (serverStartRetryTimer) {
     clearTimeout(serverStartRetryTimer);

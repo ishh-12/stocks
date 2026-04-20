@@ -1,4 +1,12 @@
 const API_BASE_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:3002";
+  process.env.REACT_APP_API_URL ||
+  (typeof window !== "undefined"
+    ? `${window.location.protocol}//${window.location.hostname}:3002`
+    : "http://localhost:3002");
 
 export const buildApiUrl = (path) => `${API_BASE_URL}${path}`;
+// Why this setup?
+
+// API_BASE_URL points to your backend server
+// buildApiUrl("/api/auth/login") creates full URLs like http://localhost:3002/api/auth/login
+// Environment variables allow different URLs for development/production

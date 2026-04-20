@@ -15,17 +15,34 @@ import NotFound from "./landing_page/NotFound";
 import Navbar from "./landing_page/Navbar";
 import Footer from "./landing_page/Footer";
 
-// Redirect component to external dashboard with token
+const getDashboardBaseUrl = () => {
+  if (process.env.REACT_APP_DASHBOARD_URL) {
+    return process.env.REACT_APP_DASHBOARD_URL.replace(/\/+$/, "");
+  }
+
+  if (typeof window === "undefined") {
+    return "http://localhost:3001";
+  }
+
+  const protocol = window.location.protocol;
+  const host = window.location.hostname;
+  const dashboardPort = process.env.REACT_APP_DASHBOARD_PORT || "3001";
+
+  return `${protocol}//${host}:${dashboardPort}`;
+};
+
+// Redirect component to external dashboard with token 
 const RedirectToDashboard = () => {
   const token = localStorage.getItem("token");
   const isAuthenticated = localStorage.getItem("isAuthenticated");
   
   if (token && isAuthenticated === "true") {
-    // Token exists and is authenticated, pass it to dashboard
-    window.location.href = `http://localhost:3001?token=${token}`;
+    // Token exists and is authenticated, pass it to dashboard on the same host.
+    const dashboardBaseUrl = getDashboardBaseUrl();
+    window.location.href = `${dashboardBaseUrl}?token=${encodeURIComponent(token)}`;
   } else {
-    // Not authenticated, go to login
-    window.location.href = "http://localhost:3000/login";
+    // Not authenticated, return to this app's login route.
+    window.location.href = `${window.location.origin}/login`;
   }
   return null;
 };

@@ -1,3 +1,9 @@
+//Models define the structure of your data and handle database operations.
+// Why Models?
+
+// Define data structure and validation rules
+// Provide methods to interact with database (find, save, update, delete)
+// Abstract database operations from your controllers
 const mongoose = require("mongoose");
 const passportLocalMongoose = require("passport-local-mongoose");
 
@@ -9,7 +15,7 @@ const UserSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: true,
+    required: true, 
     unique: true,
   },
   phone: {
@@ -29,3 +35,8 @@ UserSchema.plugin(passportLocalMongoose, {
 const UserModel = mongoose.model("User", UserSchema);
 
 module.exports = UserModel;
+// Why Models?
+
+// Define data structure and validation rules
+// Provide methods to interact with database (find, save, update, delete)
+// Abstract database operations from your controllers
