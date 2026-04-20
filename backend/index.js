@@ -34,9 +34,16 @@ const allowedOrigins = new Set([
   "http://127.0.0.1:3000",
   "http://127.0.0.1:3001",
   "http://127.0.0.1:3002",
+  "https://ishh-12-stocks-zbhu.vercel.app",
+  "https://stocks-dash-er2q87iya-aish1.vercel.app",
   "https://stocky-bk5mn20dx-aish1.vercel.app",
   "https://stocky-dash-er2q87iya-aish1.vercel.app",
 ]);
+
+const allowedOriginPatterns = [
+  // Allow Vercel preview deployments for this account while keeping scope limited.
+  /^https:\/\/[a-z0-9-]+-aish1\.vercel\.app$/i,
+];
 
 /*Why const app = express()?
 
@@ -229,7 +236,13 @@ const isAllowedOrigin = (origin) => {
 
   try {
     const parsedOrigin = new URL(origin);
-    return allowedOrigins.has(parsedOrigin.origin);
+    if (allowedOrigins.has(parsedOrigin.origin)) {
+      return true;
+    }
+
+    return allowedOriginPatterns.some((pattern) =>
+      pattern.test(parsedOrigin.origin)
+    );
   } catch {
     return false;
   }
