@@ -34,6 +34,7 @@ const allowedOrigins = new Set([
   "http://127.0.0.1:3000",
   "http://127.0.0.1:3001",
   "http://127.0.0.1:3002",
+  "https://ishh-12-stocks-frontend-six.vercel.app",
   "https://ishh-12-stocks-maho.vercel.app",
   "https://ishh-12-stocks-dash.vercel.app",
   "https://stocky-beta.vercel.app",
