@@ -108,9 +108,42 @@ a:hover {
   width: 220px;
 }
 
+.awards-main-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.awards-press-logos {
+  width: 90%;
+  max-width: 100%;
+  height: auto;
+}
+
 @media (max-width: 767.98px) {
   .nav-link {
     margin-left: 0;
+  }
+
+  .awards-section {
+    margin-top: 1.5rem !important;
+  }
+
+  .awards-image-col,
+  .awards-content-col {
+    padding: 1rem !important;
+  }
+
+  .awards-content-col h1 {
+    font-size: 1.6rem;
+  }
+
+  .awards-content-col .mb-5 {
+    margin-bottom: 1.25rem !important;
+  }
+
+  .awards-press-logos {
+    width: 100%;
   }
 
   #supportWrapper {
