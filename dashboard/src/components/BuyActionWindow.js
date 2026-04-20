@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 
 import api from "../api";
+import { getApiBaseUrl } from "../config/runtimeUrls";
 
 import GeneralContext from "./GeneralContext";
 
@@ -37,7 +38,9 @@ const BuyActionWindow = ({ uid }) => {
       generalContext.closeBuyWindow();
     } catch (err) {
       if (!err.response) {
-        setError("Backend not reachable on port 3002.");
+        setError(
+          `Backend not reachable at ${getApiBaseUrl()}. Please try again in a few seconds.`
+        );
         return;
       }
       setError(err.response?.data?.message || "Buy failed. Please try again.");

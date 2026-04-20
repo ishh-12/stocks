@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import api from "../api";
 import { VerticalGraph } from "./VerticalGraph";
+import { getApiBaseUrl } from "../config/runtimeUrls";
 
 const Holdings = () => {
   const [allHoldings, setAllHoldings] = useState([]);
@@ -15,7 +16,9 @@ const Holdings = () => {
       } catch (err) {
         setAllHoldings([]);
         if (!err.response) {
-          setError("Backend not reachable on port 3002. Start backend and try again.");
+          setError(
+            `Backend not reachable at ${getApiBaseUrl()}. Please try again in a few seconds.`
+          );
           return;
         }
         if (err.response?.status === 401) {

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import api from "../api";
 import { DoughnutChart } from "./DoughnoutChart";
+import { getApiBaseUrl } from "../config/runtimeUrls";
 
 const Summary = () => {
   const [analysis, setAnalysis] = useState(null);
@@ -15,7 +16,9 @@ const Summary = () => {
         setError("");
       } catch (err) {
         if (!err.response) {
-          setError("Backend not reachable on port 3002. Start backend and try again.");
+          setError(
+            `Backend not reachable at ${getApiBaseUrl()}. Please try again in a few seconds.`
+          );
         } else if (err.response?.status === 401) {
           setError("Session expired. Please login again.");
         } else {
