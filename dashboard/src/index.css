@@ -36,6 +36,110 @@ code {
   justify-content: flex-end;
 }
 
+.funds-toolbar {
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  margin-bottom: 18px;
+}
+
+.funds-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.funds-input {
+  min-width: 180px;
+  border: 1px solid #d7dce3;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+}
+
+.funds-message {
+  margin: 10px 0 0;
+  font-size: 0.92rem;
+}
+
+.funds-error {
+  color: #d32f2f;
+}
+
+.funds-success {
+  color: #2e7d32;
+}
+
+.funds-summary-card,
+.funds-history-card {
+  margin-top: 18px;
+  border: 1px solid #e6eaf0;
+  border-radius: 10px;
+  padding: 18px;
+  background: #fff;
+}
+
+.funds-summary-card h2 {
+  margin: 6px 0;
+}
+
+.funds-summary-label {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.funds-summary-subtext {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.funds-history-card h4 {
+  margin: 0 0 12px;
+  font-weight: 500;
+}
+
+.funds-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.funds-history-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #edf1f7;
+}
+
+.funds-history-row:last-child {
+  border-bottom: none;
+}
+
+.funds-history-row p {
+  margin: 4px 0 0;
+  color: #64748b;
+  font-size: 0.8rem;
+}
+
+.funds-positive {
+  color: #2e7d32;
+  font-weight: 700;
+}
+
+.funds-negative {
+  color: #d32f2f;
+  font-weight: 700;
+}
+
 .funds p {
   font-size: 0.8rem;
   color: rgb(179, 179, 179);
@@ -363,6 +467,25 @@ code {
 
   .content {
     padding: 4% 4%;
+  }
+
+  .funds-toolbar {
+    justify-content: flex-start;
+  }
+
+  .funds-actions {
+    width: 100%;
+  }
+
+  .funds-input {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .funds-history-row {
+    align-items: flex-start;
+    gap: 10px;
+    flex-direction: column;
   }
 }
 

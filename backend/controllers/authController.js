@@ -44,6 +44,7 @@ exports.signup = async (req, res) => {
       username: username || email.split("@")[0],
       email,
       phone,
+      balance: 0,
     });
 
     // Register user (password hashing handled automatically)
@@ -68,6 +69,7 @@ exports.signup = async (req, res) => {
         id: newUser._id,
         email: newUser.email,
         username: newUser.username,
+        balance: newUser.balance || 0,
       },
     });
   } catch (error) {
@@ -120,6 +122,7 @@ exports.login = async (req, res) => {
           id: user._id,
           email: user.email,
           username: user.username,
+          balance: user.balance || 0,
         },
       });
     });
@@ -177,14 +180,33 @@ exports.getMe = (req, res) => {
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
 
-    return res.status(200).json({
-      success: true,
-      user: {
-        id: decoded.id,
-        email: decoded.email,
-        username: decoded.username,
-      },
-    });
+    UserModel.findById(decoded.id)
+      .select("email username balance")
+      .lean()
+      .then((user) => {
+        if (!user) {
+          return res.status(404).json({
+            success: false,
+            message: "User not found.",
+          });
+        }
+
+        return res.status(200).json({
+          success: true,
+          user: {
+            id: decoded.id,
+            email: user.email,
+            username: user.username,
+            balance: user.balance || 0,
+          },
+        });
+      })
+      .catch((error) => {
+        return res.status(500).json({
+          success: false,
+          message: error.message,
+        });
+      });
   } catch (error) {
     return res.status(401).json({
       success: false,

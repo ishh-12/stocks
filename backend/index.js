@@ -15,6 +15,7 @@ const jwt = require("jsonwebtoken");
 const { HoldingsModel } = require("./model/HoldingsModel");
 const { PositionsModel } = require("./model/PositionsModel");
 const { OrdersModel } = require("./model/OrdersModel");
+const { TransactionsModel } = require("./model/TransactionsModel");
 const UserModel = require("./model/UserModel");
 const authRoutes = require("./routes/authRoutes");
 const portfolioRoutes = require("./routes/portfolioRoutes");
@@ -33,8 +34,8 @@ const allowedOrigins = new Set([
   "http://localhost:3002",
   "http://127.0.0.1:3000",
   "http://127.0.0.1:3001",
-  "http://127.0.0.1:3002",
   "https://ishh-12-stocks-frontend-six.vercel.app",
+  "http://127.0.0.1:3002",
   "https://ishh-12-stocks-maho.vercel.app",
   "https://ishh-12-stocks-dash.vercel.app",
   "https://stocky-beta.vercel.app",
@@ -416,6 +417,162 @@ app.get("/allPositions", authenticateToken, ensureDatabaseReady, async (req, res
   }
 });
 
+app.get("/funds/summary", authenticateToken, ensureDatabaseReady, async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.user.id).select("balance username email").lean();
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    const transactions = await TransactionsModel.find({ userId: req.user.id })
+      .sort({ timestamp: -1 })
+      .limit(25)
+      .lean();
+
+    return res.json({
+      success: true,
+      data: {
+        balance: Number(user.balance) || 0,
+        transactions,
+      },
+    });
+  } catch (err) {
+    console.error("Failed to load funds summary:", err.message || err);
+    return res.status(500).json({
+      success: false,
+      message: "Unable to load funds summary.",
+    });
+  }
+});
+
+app.get("/transactions", authenticateToken, ensureDatabaseReady, async (req, res) => {
+  try {
+    const transactions = await TransactionsModel.find({ userId: req.user.id })
+      .sort({ timestamp: -1 })
+      .lean();
+
+    return res.json({
+      success: true,
+      data: transactions,
+    });
+  } catch (err) {
+    console.error("Failed to fetch transactions:", err.message || err);
+    return res.status(500).json({
+      success: false,
+      message: "Unable to fetch transaction history.",
+    });
+  }
+});
+
+app.post("/add-funds", authenticateToken, ensureDatabaseReady, async (req, res) => {
+  try {
+    const amount = Number(req.body.amount);
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Enter a valid amount greater than zero.",
+      });
+    }
+
+    const user = await UserModel.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    const currentBalance = Number(user.balance) || 0;
+    const newBalance = Number((currentBalance + amount).toFixed(2));
+
+    user.balance = newBalance;
+    await user.save();
+
+    const transaction = await TransactionsModel.create({
+      userId: req.user.id,
+      type: "add",
+      amount,
+      balanceAfter: newBalance,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Funds added successfully.",
+      data: {
+        balance: newBalance,
+        transaction,
+      },
+    });
+  } catch (err) {
+    console.error("Failed to add funds:", err.message || err);
+    return res.status(500).json({
+      success: false,
+      message: "Unable to add funds.",
+    });
+  }
+});
+
+app.post("/withdraw", authenticateToken, ensureDatabaseReady, async (req, res) => {
+  try {
+    const amount = Number(req.body.amount);
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Enter a valid amount greater than zero.",
+      });
+    }
+
+    const user = await UserModel.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    const currentBalance = Number(user.balance) || 0;
+    if (amount > currentBalance) {
+      return res.status(400).json({
+        success: false,
+        message: "Insufficient balance.",
+      });
+    }
+
+    const newBalance = Number((currentBalance - amount).toFixed(2));
+
+    user.balance = newBalance;
+    await user.save();
+
+    const transaction = await TransactionsModel.create({
+      userId: req.user.id,
+      type: "withdraw",
+      amount,
+      balanceAfter: newBalance,
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Funds withdrawn successfully.",
+      data: {
+        balance: newBalance,
+        transaction,
+      },
+    });
+  } catch (err) {
+    console.error("Failed to withdraw funds:", err.message || err);
+    return res.status(500).json({
+      success: false,
+      message: "Unable to withdraw funds.",
+    });
+  }
+});
+
 app.post("/newOrder", authenticateToken, ensureDatabaseReady, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -438,6 +595,44 @@ app.post("/newOrder", authenticateToken, ensureDatabaseReady, async (req, res) =
       });
     }
 
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    let holding = await HoldingsModel.findOne({ userId, name });
+    const orderValue = Number((qty * price).toFixed(2));
+
+    if (mode === "BUY") {
+      const currentBalance = Number(user.balance) || 0;
+      if (orderValue > currentBalance) {
+        return res.status(400).json({
+          success: false,
+          message: "Insufficient funds. Add money before placing this buy order.",
+        });
+      }
+
+      user.balance = Number((currentBalance - orderValue).toFixed(2));
+    } else if (mode === "SELL") {
+      if (!holding) {
+        return res.status(400).json({
+          success: false,
+          message: "You do not hold this stock, so it cannot be sold.",
+        });
+      }
+
+      const oldQty = Number(holding.qty) || 0;
+      if (qty > oldQty) {
+        return res.status(400).json({
+          success: false,
+          message: "You cannot sell more shares than you hold.",
+        });
+      }
+    }
+
     const newOrder = new OrdersModel({
       userId,
       name,
@@ -446,8 +641,6 @@ app.post("/newOrder", authenticateToken, ensureDatabaseReady, async (req, res) =
       mode,
     });
     await newOrder.save();
-
-    let holding = await HoldingsModel.findOne({ userId, name });
 
     if (mode === "BUY") {
       if (!holding) {
@@ -473,9 +666,19 @@ app.post("/newOrder", authenticateToken, ensureDatabaseReady, async (req, res) =
       }
 
       await holding.save();
-    } else if (holding) {
+
+      await user.save();
+
+      await TransactionsModel.create({
+        userId,
+        type: "buy",
+        amount: orderValue,
+        balanceAfter: user.balance,
+      });
+    } else if (mode === "SELL") {
       const oldQty = Number(holding.qty) || 0;
       const newQty = oldQty - qty;
+      const currentBalance = Number(user.balance) || 0;
 
       if (newQty <= 0) {
         await HoldingsModel.deleteOne({ _id: holding._id });
@@ -484,6 +687,16 @@ app.post("/newOrder", authenticateToken, ensureDatabaseReady, async (req, res) =
         holding.price = price;
         await holding.save();
       }
+
+      user.balance = Number((currentBalance + orderValue).toFixed(2));
+      await user.save();
+
+      await TransactionsModel.create({
+        userId,
+        type: "sell",
+        amount: orderValue,
+        balanceAfter: user.balance,
+      });
     }
 
     analysisService.invalidateUser(userId);
